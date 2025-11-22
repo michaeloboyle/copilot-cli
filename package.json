@@ -6,20 +6,47 @@
   "bin": {
     "copilot": "./dist/cli.js"
   },
+  "main": "./dist/cli.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",
     "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "prepublishOnly": "npm run build && npm test -- --run",
     "lint": "eslint src --ext .ts"
   },
   "keywords": [
     "copilot",
+    "copilot-money",
     "finance",
+    "personal-finance",
     "cli",
-    "budgeting"
+    "budgeting",
+    "transactions",
+    "csv",
+    "sqlite"
   ],
-  "author": "Michael O'Boyle",
+  "author": {
+    "name": "Michael O'Boyle",
+    "url": "https://oboyle.co"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaeloboyle/copilot-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/michaeloboyle/copilot-cli/issues"
+  },
+  "homepage": "https://github.com/michaeloboyle/copilot-cli#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.10.0",
