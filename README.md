@@ -10,6 +10,35 @@ npm run build
 npm link  # Makes 'copilot' command available globally
 ```
 
+## Example Output
+
+```
+$ copilot tx -d 7
+┌────────────┬────────────────────────────────────────┬────────────────────┬────────────┐
+│ Date       │ Description                            │ Category           │ Amount     │
+├────────────┼────────────────────────────────────────┼────────────────────┼────────────┤
+│ 2025-11-22 │ Whole Foods Market                     │ Groceries          │ 87.43      │
+│ 2025-11-21 │ Shell Gas Station                      │ Auto               │ 45.00      │
+│ 2025-11-21 │ Starbucks                              │ Restaurants        │ 6.50       │
+│ 2025-11-20 │ Amazon Prime                           │ Shopping           │ 14.99      │
+│ 2025-11-19 │ Netflix                                │ Entertainment      │ 15.99      │
+└────────────┴────────────────────────────────────────┴────────────────────┴────────────┘
+```
+
+```
+$ copilot summary --by-category -d 30
+Spending by Category (last 30 days)
+
+┌─────────────────────────┬───────────────┬───────────────┐
+│ Category                │ Spent         │ Transactions  │
+├─────────────────────────┼───────────────┼───────────────┤
+│ Groceries               │ 543.21        │ 12            │
+│ Restaurants             │ 287.50        │ 18            │
+│ Auto                    │ 156.00        │ 4             │
+│ Entertainment           │ 45.99         │ 3             │
+└─────────────────────────┴───────────────┴───────────────┘
+```
+
 ## Usage
 
 ### Import transactions from CSV
