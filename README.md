@@ -116,7 +116,12 @@ This software is a data management tool only. Nothing in this software constitut
 
 ### No Affiliation
 
-This project is **not affiliated with, endorsed by, or connected to Copilot.money** or its parent company. "Copilot" in this context refers to compatibility with CSV exports from that service. All trademarks belong to their respective owners.
+This project is **not affiliated with, endorsed by, or connected to**:
+- **Copilot.money** or its parent company
+- **Microsoft Corporation** or GitHub Copilot
+- **Any other "Copilot" branded product or service**
+
+"Copilot" in this project name refers solely to compatibility with CSV exports from the Copilot.money personal finance app. All trademarks belong to their respective owners.
 
 ### Data Accuracy
 

@@ -82,14 +82,41 @@ export function importTransactions(
     return { imported: 0, skipped: transactions.length };
   }
 
+  // Auto-create accounts from transactions
+  const insertAccount = db.prepare(`
+    INSERT OR IGNORE INTO accounts (id, name, type)
+    VALUES (@id, @name, @type)
+  `);
+
   const insertTx = db.prepare(`
     INSERT OR IGNORE INTO transactions (id, date, description, merchant, category, amount, account_id, notes, type)
-    VALUES (@id, @date, @description, @merchant, @category, @amount, @account, @notes, @type)
+    VALUES (@id, @date, @description, @merchant, @category, @amount, @accountId, @notes, @type)
   `);
 
   let imported = 0;
+  const seenAccounts = new Set<string>();
+
   const insertMany = db.transaction((txs: CopilotTransaction[]) => {
     for (const tx of txs) {
+      // Create account if not seen
+      if (tx.account && !seenAccounts.has(tx.account)) {
+        const accountId = createHash('sha256')
+          .update(tx.account)
+          .digest('hex')
+          .slice(0, 16);
+
+        insertAccount.run({
+          id: accountId,
+          name: tx.account,
+          type: tx.type || 'unknown',
+        });
+        seenAccounts.add(tx.account);
+      }
+
+      const accountId = tx.account
+        ? createHash('sha256').update(tx.account).digest('hex').slice(0, 16)
+        : null;
+
       const id = createHash('sha256')
         .update(`${tx.date}|${tx.description}|${tx.amount}|${tx.account}`)
         .digest('hex')
@@ -102,7 +129,7 @@ export function importTransactions(
         merchant: tx.merchant || null,
         category: tx.category || null,
         amount: tx.amount,
-        account: tx.account || null,
+        accountId: accountId,
         notes: tx.notes || null,
         type: tx.type || null,
       });

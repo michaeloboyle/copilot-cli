@@ -28,7 +28,9 @@ ADDITIONAL DISCLAIMERS FOR FINANCIAL DATA SOFTWARE:
    not provide financial, investment, legal, or tax advice.
 
 2. NO AFFILIATION: This project is not affiliated with, endorsed by, or
-   connected to Copilot.money or any financial institution.
+   connected to Copilot.money, Microsoft Corporation, GitHub Copilot, or any
+   other "Copilot" branded product or service. "Copilot" refers solely to
+   compatibility with CSV exports from the Copilot.money personal finance app.
 
 3. DATA ACCURACY: The developers make no guarantees regarding the accuracy,
    completeness, or reliability of data processed by this software. Users are
