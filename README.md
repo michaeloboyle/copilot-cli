@@ -1,6 +1,6 @@
 # copilot-cli
 
-CLI tool for querying Copilot.money financial data via CSV exports.
+CLI tool for querying [Copilot.money](https://copilot.money) financial data via CSV exports.
 
 ## Installation
 
