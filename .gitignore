@@ -4,6 +4,7 @@ dist/
 *.db-journal
 .env
 .DS_Store
+coverage/
 
 # Claude Code
 .claude/
