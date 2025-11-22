@@ -16,6 +16,20 @@ interface MonthlySum {
   net: number;
 }
 
+function showFirstRunGuidance(): void {
+  console.log(chalk.yellow('No transactions in database yet.'));
+  console.log(chalk.gray('\nTo get started:'));
+  console.log(chalk.gray('  1. Export CSV from Copilot.money (Settings → Account → Export)'));
+  console.log(chalk.gray('  2. Run: copilot import <path-to-csv>'));
+  console.log(chalk.gray('\nOn macOS with Apple Shortcuts configured:'));
+  console.log(chalk.gray('  copilot sync'));
+}
+
+function isDatabaseEmpty(db: ReturnType<typeof getDb>): boolean {
+  const result = db.prepare('SELECT COUNT(*) as count FROM transactions').get() as { count: number };
+  return result.count === 0;
+}
+
 export const summaryCommand = new Command('summary')
   .description('Show spending summary')
   .option('-d, --days <n>', 'Analyze last N days', '30')
@@ -37,6 +51,11 @@ export const summaryCommand = new Command('summary')
   });
 
 function showByCategory(db: ReturnType<typeof getDb>, options: { days: string; json?: boolean }) {
+  if (isDatabaseEmpty(db)) {
+    showFirstRunGuidance();
+    return;
+  }
+
   const rows = db.prepare(`
     SELECT
       COALESCE(category, 'Uncategorized') as category,
@@ -72,6 +91,11 @@ function showByCategory(db: ReturnType<typeof getDb>, options: { days: string; j
 }
 
 function showByMonth(db: ReturnType<typeof getDb>, options: { json?: boolean }) {
+  if (isDatabaseEmpty(db)) {
+    showFirstRunGuidance();
+    return;
+  }
+
   const rows = db.prepare(`
     SELECT
       strftime('%Y-%m', date) as month,
@@ -109,6 +133,11 @@ function showByMonth(db: ReturnType<typeof getDb>, options: { json?: boolean }) 
 }
 
 function showOverview(db: ReturnType<typeof getDb>, options: { days: string; json?: boolean }) {
+  if (isDatabaseEmpty(db)) {
+    showFirstRunGuidance();
+    return;
+  }
+
   const days = parseInt(options.days);
 
   const stats = db.prepare(`

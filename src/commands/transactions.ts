@@ -54,15 +54,28 @@ export const transactionsCommand = new Command('transactions')
     query += ` LIMIT ${parseInt(options.limit)}`;
 
     const rows = db.prepare(query).all(params) as TransactionRow[];
-    db.close();
 
     if (options.json) {
       console.log(JSON.stringify(rows, null, 2));
+      db.close();
       return;
     }
 
     if (rows.length === 0) {
-      console.log(chalk.yellow('No transactions found'));
+      // Check if database is empty (first run)
+      const totalCount = db.prepare('SELECT COUNT(*) as count FROM transactions').get() as { count: number };
+      db.close();
+      if (totalCount.count === 0) {
+        console.log(chalk.yellow('No transactions in database yet.'));
+        console.log(chalk.gray('\nTo get started:'));
+        console.log(chalk.gray('  1. Export CSV from Copilot.money (Settings → Account → Export)'));
+        console.log(chalk.gray('  2. Run: copilot import <path-to-csv>'));
+        console.log(chalk.gray('\nOn macOS with Apple Shortcuts configured:'));
+        console.log(chalk.gray('  copilot sync'));
+      } else {
+        console.log(chalk.yellow('No transactions found matching your filters.'));
+        console.log(chalk.gray(`\nTry adjusting: --days, --category, --search, --min, --max`));
+      }
       return;
     }
 
@@ -84,4 +97,5 @@ export const transactionsCommand = new Command('transactions')
 
     console.log(table.toString());
     console.log(chalk.gray(`\nShowing ${rows.length} transactions`));
+    db.close();
   });
