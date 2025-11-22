@@ -166,6 +166,6 @@ function showOverview(db: ReturnType<typeof getDb>, options: { days: string; jso
   console.log(`  Transactions:    ${stats.total_transactions}`);
   console.log(`  Income:          ${chalk.green('$' + stats.total_income.toFixed(2))}`);
   console.log(`  Expenses:        ${chalk.red('$' + Math.abs(stats.total_expenses).toFixed(2))}`);
-  console.log(`  Net:             ${stats.net >= 0 ? chalk.green : chalk.red}('$' + stats.net.toFixed(2))`);
+  console.log(`  Net:             ${(stats.net >= 0 ? chalk.green : chalk.red)('$' + stats.net.toFixed(2))}`);
   console.log(`  Avg Expense:     ${chalk.yellow('$' + Math.abs(stats.avg_expense || 0).toFixed(2))}`);
 }
