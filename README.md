@@ -12,10 +12,30 @@ npm link  # Makes 'copilot' command available globally
 
 ## Usage
 
-### Import transactions from Copilot CSV export
+### Sync (Export + Import) - macOS only
 
 ```bash
-# Export from Copilot: Settings → Account → Export Data
+# One command to export from Copilot and import
+copilot sync
+
+# Requires an Apple Shortcut named "Export Copilot"
+# See "Apple Shortcuts Setup" below
+```
+
+### Export from Copilot - macOS only
+
+```bash
+# Trigger export via Apple Shortcuts
+copilot export
+
+# Custom shortcut name
+copilot export --shortcut "My Copilot Export"
+```
+
+### Import transactions from CSV
+
+```bash
+# Import a CSV file manually exported from Copilot
 copilot import ~/Downloads/copilot-export.csv
 
 # Preview without importing
@@ -62,13 +82,31 @@ copilot db-path  # Show database location
 
 Data is stored in `~/.copilot-cli/copilot.db` (SQLite).
 
+## Apple Shortcuts Setup (macOS)
+
+To enable `copilot sync` and `copilot export`, create an Apple Shortcut:
+
+1. Open **Shortcuts** app
+2. Create new shortcut named **"Export Copilot"**
+3. Add actions:
+   - **Open App**: Copilot
+   - **Wait**: 2 seconds
+   - **Run AppleScript** (or use keyboard shortcuts to navigate to export)
+
+Alternative: Export manually from Copilot (Settings → Account → Export) and use `copilot import`.
+
 ## Workflow
 
+**Automated (macOS)**:
+```bash
+copilot sync        # Export + import in one step
+copilot summary     # View spending
+```
+
+**Manual (any platform)**:
 1. Export CSV from Copilot.money (Settings → Account → Export)
 2. Run `copilot import <file.csv>`
 3. Query with `copilot tx` or `copilot summary`
-
-For automated exports, consider using Apple Shortcuts to trigger Copilot export and place in a watched folder.
 
 ## Legal Disclaimers
 

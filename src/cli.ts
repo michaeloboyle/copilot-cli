@@ -3,6 +3,8 @@ import { Command } from 'commander';
 import { importCommand } from './commands/import.js';
 import { transactionsCommand } from './commands/transactions.js';
 import { summaryCommand } from './commands/summary.js';
+import { exportCommand } from './commands/export.js';
+import { syncCommand } from './commands/sync.js';
 import { getDbPath } from './db/schema.js';
 
 const program = new Command();
@@ -12,6 +14,8 @@ program
   .description('CLI tool for querying Copilot.money data')
   .version('0.1.0');
 
+program.addCommand(syncCommand);
+program.addCommand(exportCommand);
 program.addCommand(importCommand);
 program.addCommand(transactionsCommand);
 program.addCommand(summaryCommand);
