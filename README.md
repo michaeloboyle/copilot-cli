@@ -108,6 +108,80 @@ copilot summary     # View spending
 2. Run `copilot import <file.csv>`
 3. Query with `copilot tx` or `copilot summary`
 
+## FAQ / Troubleshooting
+
+### "permission denied: copilot" after npm link
+
+The TypeScript compiler doesn't preserve execute permissions. Fix with:
+
+```bash
+chmod +x $(npm prefix -g)/lib/node_modules/copilot-cli/dist/cli.js
+```
+
+Or rebuild (this runs automatically now):
+```bash
+npm run build  # postbuild script sets +x
+```
+
+### Command not found after npm link
+
+Your shell may not have the npm global bin in PATH. Check with:
+
+```bash
+echo $PATH | grep -o '[^:]*npm[^:]*'
+npm prefix -g  # Shows where npm installs global packages
+```
+
+Add to your shell config (~/.zshrc or ~/.bashrc):
+```bash
+export PATH="$(npm prefix -g)/bin:$PATH"
+```
+
+### Import shows 0 transactions
+
+Make sure you're exporting from Copilot.money, not another app. The CSV should have columns like: `date`, `name`, `amount`, `category`, `account`.
+
+### Search returns no results
+
+Searches look at the transaction description. Run `copilot tx -d 7` to see recent transactions and verify descriptions are populated.
+
+### "SQLITE_CONSTRAINT" error on import
+
+This can happen with corrupted or partial imports. Reset the database:
+
+```bash
+rm ~/.copilot-cli/copilot.db
+copilot import your-file.csv
+```
+
+### How do I export from Copilot.money?
+
+1. Open Copilot app on Mac/iPhone
+2. Go to **Settings** → **Account** → **Export**
+3. Choose date range and export as CSV
+4. Import with `copilot import ~/Downloads/copilot-export.csv`
+
+### Can I use this with other finance apps?
+
+The CSV parser is flexible and handles common column names (date, description, amount, category, account). If your app exports similar CSV format, it may work. Test with `--dry-run` first.
+
+### Where is my data stored?
+
+```bash
+copilot db-path  # Shows: ~/.copilot-cli/copilot.db
+```
+
+This is a SQLite database. You can query it directly:
+```bash
+sqlite3 ~/.copilot-cli/copilot.db "SELECT COUNT(*) FROM transactions"
+```
+
+### How do I backup my data?
+
+```bash
+cp ~/.copilot-cli/copilot.db ~/copilot-backup-$(date +%Y%m%d).db
+```
+
 ## Legal Disclaimers
 
 ### Not Financial Advice
