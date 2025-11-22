@@ -1,6 +1,6 @@
 import { parse } from 'csv-parse/sync';
-import { readFileSync, createHash } from 'fs';
-import { createHash as cryptoHash } from 'crypto';
+import { readFileSync } from 'fs';
+import { createHash } from 'crypto';
 import type Database from 'better-sqlite3';
 
 export interface CopilotTransaction {
@@ -74,7 +74,7 @@ export function importTransactions(
   filename: string
 ): { imported: number; skipped: number } {
   const content = JSON.stringify(transactions);
-  const checksum = cryptoHash('sha256').update(content).digest('hex');
+  const checksum = createHash('sha256').update(content).digest('hex');
 
   // Check if already imported
   const existing = db.prepare('SELECT id FROM imports WHERE checksum = ?').get(checksum);
@@ -90,7 +90,7 @@ export function importTransactions(
   let imported = 0;
   const insertMany = db.transaction((txs: CopilotTransaction[]) => {
     for (const tx of txs) {
-      const id = cryptoHash('sha256')
+      const id = createHash('sha256')
         .update(`${tx.date}|${tx.description}|${tx.amount}|${tx.account}`)
         .digest('hex')
         .slice(0, 16);
