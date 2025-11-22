@@ -17,6 +17,8 @@ export interface CopilotTransaction {
 interface CsvRecord {
   Date?: string;
   Description?: string;
+  Name?: string;  // Copilot.money uses "name" for transaction description
+  name?: string;
   Merchant?: string;
   Category?: string;
   Amount?: string;
@@ -37,7 +39,7 @@ export function parseTransactionsCsv(filePath: string): CopilotTransaction[] {
 
   return records.map((record) => ({
     date: normalizeDate(record.Date || record.date || ''),
-    description: record.Description || record.description || '',
+    description: record.Description || record.description || record.Name || record.name || '',
     merchant: record.Merchant || record.merchant,
     category: record.Category || record.category,
     amount: parseAmount(record.Amount || record.amount || '0'),
